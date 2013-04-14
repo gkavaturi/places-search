@@ -1,4 +1,5 @@
 (function(){
+  //this is the initialization function
 	FoodTruck.maps.init = init = function (){
 		var map,
 			currentLocation = new google.maps.LatLng(37.34, -121.89694); 	
@@ -11,14 +12,17 @@
 
 	    FoodTruck.location = currentLocation;
 	    FoodTruck.map = map;
+      FoodTruck.markers = {};
 
 	}
 
-	FoodTruck.maps.setMarker = setMarker = function(query) {
+  //this function sets the markers on the map initially
+	FoodTruck.maps.setMarkers = setMarkers = function(query) {
 		if (!query){
       console.log('No query specified');
       return;
     }
+    FoodTruck.markers[query]=[];
     var currentLocation = FoodTruck.location,
 			map = FoodTruck.map, 	
 			request = {
@@ -39,14 +43,27 @@
 		            map: map,
 		            title: obj.name
 		        });
+         FoodTruck.markers[query].push(marker);
 			});
 		});
 	}
 
+  //this switches markers on/off on the map based on the user selected filter
+  FoodTruck.maps.toggleMarkers = toggleMarkers = function(query) {
+    if (!FoodTruck.markers[query]) {
+      console.log('marker does not exist');
+      return;
+    }
+    FoodTruck.markers[query].forEach(function(marker){
+      marker.getVisible() ? marker.setVisible(false) : marker.setVisible(true);
+    });
+  }
+
+  //we initliaze the map and the markers below
 	init();
 
-  ['schools',  'parking'].forEach(function(query){
-    setMarker(query);
+  ['Schools', 'Companies', 'Parking'].forEach(function(query){
+    setMarkers(query);
   });
 
 }());

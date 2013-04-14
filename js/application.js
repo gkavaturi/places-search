@@ -1,6 +1,9 @@
 (function(){
   FoodTruck.application.handleFilters = handleFilters = function(e) {
-  	$(e.target).closest('li').find('i').toggleClass('icon-ok');
+    var $eItem = $(e.target).closest('li');
+  	$eItem.find('i').toggleClass('icon-ok');
+    FoodTruck.maps.toggleMarkers($eItem.text());
   }
-    $('ul.selection-list').on('click','li',handleFilters);
+
+  $('ul.selection-list').on('click','li',handleFilters);
 }());
